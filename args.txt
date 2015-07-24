@@ -5,3 +5,12 @@ password =
 
 [questions]
 questions = questions.txt
+
+[tor]
+ip = 127.0.0.1
+port = 9050
+
+[options]
+questions = 3
+isanon = 0
+sleeptime = 1
