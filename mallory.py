@@ -1,19 +1,10 @@
-#Libs needed
-#socksipy
-#pycurl
-#Mechanize - http://wwwsearch.sourceforge.net/mechanize/
-#Stem - https://stem.torproject.org
 
-#get some questions from http://www.yensa.com
 
-#import pycurl
-import atexit
-import os, signal, subprocess
 from stem.control import Controller
 import ConfigParser
 import stem.process
 import socks, socket
-import sys, threading, time, mechanize, cookielib, random
+import sys, time, mechanize, cookielib, random
 import mallory_heart
 
 def create_connection(address, timeout=None, source_address=None):
