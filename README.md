@@ -10,7 +10,6 @@ This is a simple ask.fm spambot! You need [TOR](https://www.torproject.org) to u
 * [TOR](https://www.torproject.org) - mallory will start TOR automatically.
 * [Stem](https://stem.torproject.org) 
 * [Mechanize](http://wwwsearch.sourceforge.net/mechanize/)
-* [SocksiPy](https://pypi.python.org/pypi/SocksiPy-branch)
 
 ## Usage
 ```
