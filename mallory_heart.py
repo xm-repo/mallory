@@ -1,8 +1,7 @@
 
 
 import ConfigParser
-import socks, socket
-import sys, threading, time, mechanize, cookielib, random
+import sys, time, mechanize, cookielib, random
 
 sleep = time.sleep
 
@@ -44,11 +43,16 @@ class QuestionPoster():
         self.PASSWORD = self.cfg.get("account", "password")
 
         self.q = []
-        with open(self.cfg.get("questions", "questions")) as f:
+        with open(self.cfg.get("files", "questions")) as f:
             for question in f:
                 self.q.append(question)
 
-    def go(self, *args):
+        self.users = set()
+        with open(self.cfg.get("files", "questions")) as f:
+            for user in f:
+                self.users.add(user)
+
+    def go(self, ask = True, *args):
         while True:
             br = new_browser()
             #Open Login Page
@@ -64,20 +68,37 @@ class QuestionPoster():
                 lines = br.response().readlines()
                 for line in lines:
                     if 'str_profile_avatar' in line:
+                        
                         tmp = line.split('href="')[1]
                         user = tmp[:tmp.find('"')]
-                        for i in range(3):
+
+                        if user not in self.users: 
+                            with open("users.txt", "a") as f:
+                                self.users.add(user)
+                                f.write(user + "\n")
+                        else:
+                            continue
+
+                        if not ask: 
+                            continue
+
+                        qid = random.randint(0, len(self.q) - 1)
+                        for i in range(self.questions):
+                            
+                            qid = (qid + 100) % (len(self.q) - 1)
+                            
                             br.open('http://ask.fm' + user)
                             br.select_form(nr=1)
-                            qid = random.randint(0, len(self.q) - 1)
                             br.form['question[question_text]'] = self.q[qid]
                             control = br.find_control(type="checkbox").items[0]
                             if control.disabled == False:
                                 control.selected = self.is_anon
                             br.submit()
+                            
                             n += 1
                             sys.stdout.write("\r" + "Questions: " + str(n))
                             sys.stdout.flush()
+                            
                             for i in range(self.sleeptime):
                                 sys.stdout.write("\r" + " " * 100 + "\r" + "Questions: " + str(n) + ' (' + str(self.sleeptime - i) + ')')
                                 sys.stdout.flush()

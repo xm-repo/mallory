@@ -3,14 +3,15 @@
 user = 
 password = 
 
-[questions]
+[files]
 questions = questions.txt
+users = users.txt
 
 [tor]
 ip = 127.0.0.1
 port = 9050
 
 [options]
-questions = 3
+questions = 5
 isanon = 0
-sleeptime = 1
+sleeptime = 0
