@@ -1,5 +1,5 @@
 # mallory
-This is a simple ask.fm spambot! 
+This is a simple ask.fm spambot! You need [TOR](https://www.torproject.org) to use it.  
 
 * **args.txt** - some easy to understand options (user, password, paths)
 * **questions.txt** - list of questions (you can find more on http://www.yensa.com)
