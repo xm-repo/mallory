@@ -4,6 +4,7 @@ from stem.control import Controller
 import ConfigParser
 import stem.process
 import socks, socket
+import signal
 import sys, time, mechanize, cookielib, random
 import mallory_heart
 
@@ -21,8 +22,17 @@ cfg.read("args.txt")
 
 sys.stdout.write("\rTor: launching")
 sys.stdout.flush()
+
 #Initializes a tor process. This blocks until initialization completes or we error out
-stem.process.launch_tor()
+try:
+    signal.signal(signal.SIGINT, signal.SIG_IGN)
+    stem.process.launch_tor() 
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+except Exception as e:
+    sys.stdout.write("\r" + " " * 100 + "\r" + "Tor: problems \n")
+    sys.stdout.flush()
+    sys.exit(0)
+
 sys.stdout.write("\r" + " " * 100 + "\r" + "Tor: ready")
 sys.stdout.flush()
 
@@ -31,6 +41,7 @@ while True:
 
     try:
         socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, cfg.get("tor", "ip"), int(cfg.get("tor", "port")), True)
+        print('q')
         socket.socket = socks.socksocket
         qp.go()
     
