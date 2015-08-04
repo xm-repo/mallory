@@ -1,8 +1,8 @@
 
 
 [account]
-user = xmorozov@gmail.com
-password = 1rjcvjyfdn2
+user = 
+password = 
 
 [files]
 questions = questions.txt
