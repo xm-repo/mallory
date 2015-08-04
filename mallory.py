@@ -26,15 +26,15 @@ stem.process.launch_tor()
 sys.stdout.write("\r" + " " * 100 + "\r" + "Tor: ready")
 sys.stdout.flush()
 
+qp = mallory_heart.QuestionPoster()
 while True:
 
     try:
         socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, cfg.get("tor", "ip"), int(cfg.get("tor", "port")), True)
         socket.socket = socks.socksocket
-        qp = mallory_heart.QuestionPoster()
         qp.go()
     
-    except KeyboardInterrupt:
+    except KeyboardInterrupt as e:
         print("\nGoodbye!")
         socks.setdefaultproxy()
         with Controller.from_port(port = 9051) as tor_controller:
@@ -42,13 +42,10 @@ while True:
             tor_controller.signal(stem.Signal.SHUTDOWN)
         sys.exit(0)
     
-    except Exception as e:
-        print("\nProblems") 
-        print(e)      
+    except Exception as e:      
         socks.setdefaultproxy()
         with Controller.from_port(port = 9051) as tor_controller:
             tor_controller.authenticate()  # provide the password here if you set one
             if tor_controller.is_newnym_available():
-                print("NEWNYM")
                 tor_controller.signal(stem.Signal.NEWNYM)
                 time.sleep(tor_controller.get_newnym_wait())
