@@ -23,11 +23,11 @@ cfg.read("args.txt")
 sys.stdout.write("\rTor: launching")
 sys.stdout.flush()
 
-#Initializes a tor process. This blocks until initialization completes or we error out
 try:
-    signal.signal(signal.SIGINT, signal.SIG_IGN)
+    signal.signal(signal.SIGINT, signal.SIG_IGN) #disable sigint for tor process, so we can shutdown it 
+    #Initializes a tor process. This blocks until initialization completes or we error out
     stem.process.launch_tor() 
-    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    signal.signal(signal.SIGINT, signal.SIG_DFL) #enable sigint again
 except Exception as e:
     sys.stdout.write("\r" + " " * 100 + "\r" + "Tor: problems \n")
     sys.stdout.flush()
@@ -41,7 +41,6 @@ while True:
 
     try:
         socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5, cfg.get("tor", "ip"), int(cfg.get("tor", "port")), True)
-        print('q')
         socket.socket = socks.socksocket
         qp.go()
     
@@ -49,7 +48,7 @@ while True:
         print("\nGoodbye!")
         socks.setdefaultproxy()
         with Controller.from_port(port = 9051) as tor_controller:
-            tor_controller.authenticate()  # pr ovide the password here if you set one
+            tor_controller.authenticate()  # provide the password here if you set one
             tor_controller.signal(stem.Signal.SHUTDOWN)
         sys.exit(0)
     
