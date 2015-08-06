@@ -32,6 +32,8 @@ class QuestionPoster():
     def __init__(self, *args):
         #Thread.__init__(self)
         
+        self.n = 0
+
         self.cfg = ConfigParser.ConfigParser()
         self.cfg.read("args.txt")
 
@@ -60,7 +62,6 @@ class QuestionPoster():
         br.form['login'] = self.USER
         br.form['password'] = self.PASSWORD
         br.submit()
-        n = 0
         f = open("users.txt", "a")
         while True:
             #Open Stream
@@ -95,13 +96,13 @@ class QuestionPoster():
                             control.selected = self.is_anon
                         br.submit()
                         
-                        n += 1
-                        sys.stdout.write("\r" + "Questions: " + str(n))
+                        self.n += 1
+                        sys.stdout.write("\r" + "Questions: " + str(self.n))
                         sys.stdout.flush()
                         
                         for i in range(self.sleeptime):
-                            sys.stdout.write("\r" + " " * 100 + "\r" + "Questions: " + str(n) + ' (' + str(self.sleeptime - i) + ')')
+                            sys.stdout.write("\r" + " " * 100 + "\r" + "Questions: " + str(self.n) + ' (' + str(self.sleeptime - i) + ')')
                             sys.stdout.flush()
                             sleep(1)
-                        sys.stdout.write("\r" + " " * 100 + "\r" + "Questions: " + str(n) + ' (' + time.strftime("%H:%M:%S") + '?)')
+                        sys.stdout.write("\r" + " " * 100 + "\r" + "Questions: " + str(self.n) + ' (' + time.strftime("%H:%M:%S") + '?)')
                         sys.stdout.flush()

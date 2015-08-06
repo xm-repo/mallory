@@ -10,6 +10,15 @@ This is a simple ask.fm spambot! You need [TOR](https://www.torproject.org) to u
 * [TOR](https://www.torproject.org) - mallory will start TOR automatically.
 * [Stem](https://stem.torproject.org) 
 * [Mechanize](http://wwwsearch.sourceforge.net/mechanize/)
+```
+brew install tor (on OS X)
+pip install stem
+pip install mechanize
+```
+or just
+```
+pip install -r requirements.txt
+```
 
 ## Usage
 ```
