@@ -27,12 +27,13 @@ def new_browser(*args):
     br.addheaders = [('User-agent', 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
     return br
 
-class QuestionPoster():
+class QuestionPoster:
 
-    def __init__(self, *args):
+    def __init__(self, CUI_update=None):
         #Thread.__init__(self)
         
         self.n = 0
+        self.CUI_update = CUI_update
 
         self.cfg = ConfigParser.ConfigParser()
         self.cfg.read("args.txt")
@@ -54,7 +55,7 @@ class QuestionPoster():
             for user in f:
                 self.users.add(user)
 
-    def go(self, ask = True, *args):
+    def go(self):
         br = new_browser()
         #Open Login Page
         br.open('http://ask.fm/login')
@@ -71,16 +72,13 @@ class QuestionPoster():
                 if 'str_profile_avatar' in line:
                     
                     tmp = line.split('href="')[1]
-                    user = tmp[:tmp.find('"')]
+                    user = tmp[:tmp.find('"')].lower()
 
                     if user not in self.users: 
                         self.users.add(user)
                         f.write(user + "\n")
                         f.flush()
                     else:
-                        continue
-
-                    if not ask: 
                         continue
 
                     qid = random.randint(0, len(self.q) - 1)
@@ -97,12 +95,11 @@ class QuestionPoster():
                         br.submit()
                         
                         self.n += 1
-                        sys.stdout.write("\r" + "Questions: " + str(self.n))
-                        sys.stdout.flush()
-                        
+                        if self.CUI_update:
+                            self.CUI_update(3, "Questions: " + str(self.n))                        
                         for i in range(self.sleeptime):
-                            sys.stdout.write("\r" + " " * 100 + "\r" + "Questions: " + str(self.n) + ' (' + str(self.sleeptime - i) + ')')
-                            sys.stdout.flush()
+                            if self.CUI_update:
+                                self.CUI_update(3, "Questions: " + str(self.n) + ' (' + str(self.sleeptime - i) + ')')
                             sleep(1)
-                        sys.stdout.write("\r" + " " * 100 + "\r" + "Questions: " + str(self.n) + ' (' + time.strftime("%H:%M:%S") + '?)')
-                        sys.stdout.flush()
+                        if self.CUI_update:
+                            self.CUI_update(3, "Questions: " + str(self.n) + ' (' + time.strftime("%H:%M:%S") + '?)')
