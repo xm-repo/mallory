@@ -63,8 +63,8 @@ while True:
         socks.setdefaultproxy() #default proxy to interact with TOR
         with Controller.from_port(port = 9051) as tor_controller:
             tor_controller.authenticate()  #provide the password here if you set one
-            CUI_update(1, "{:,}".format(int(tor_controller.get_info('traffic/read')) / 1024) + " Kb" + 
-                " / " + "{:,}".format(int(tor_controller.get_info('traffic/written')) / 1024) + " Kb")
+            CUI_update(1, "{:,}".format(int(tor_controller.get_info('traffic/read')) / 10**6) + " Mb" + 
+                " / " + "{:,}".format(int(tor_controller.get_info('traffic/written')) / 10**6) + " Mb")
             if tor_controller.is_newnym_available():
                 tor_controller.signal(stem.Signal.NEWNYM)
                 time.sleep(tor_controller.get_newnym_wait())
