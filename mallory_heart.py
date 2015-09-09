@@ -77,7 +77,7 @@ class QuestionPoster:
                     if user not in self.users: 
                         self.users.add(user)
                         f.write(user + "\n")
-                        f.flush()
+                        #f.flush()
                     else:
                         continue
 
@@ -96,10 +96,10 @@ class QuestionPoster:
                         
                         self.n += 1
                         if self.CUI_update:
-                            self.CUI_update(3, "Questions: " + str(self.n))                        
+                            self.CUI_update(2, "Questions: " + str(self.n))                        
                         for i in range(self.sleeptime):
                             if self.CUI_update:
-                                self.CUI_update(3, "Questions: " + str(self.n) + ' (' + str(self.sleeptime - i) + ')')
-                            sleep(1)
+                                self.CUI_update(2, "Questions: " + str(self.n) + ' (' + str(self.sleeptime - i) + ')')
+                            #sleep(1)
                         if self.CUI_update:
-                            self.CUI_update(3, "Questions: " + str(self.n) + ' (' + time.strftime("%H:%M:%S") + '?)')
+                            self.CUI_update(2, "Questions: " + str(self.n) + ' (' + time.strftime("%H:%M:%S") + '?)')

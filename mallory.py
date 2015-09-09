@@ -1,5 +1,6 @@
 
 import curses
+from os import system
 from stem.control import Controller, EventType
 import ConfigParser
 import stem.process
@@ -38,6 +39,8 @@ try:
     signal.signal(signal.SIGINT, signal.SIG_DFL)  #enable sigint again
 except Exception as e:
     CUI_update(0, "Tor: problems")
+    
+    system("sync")
     curses.endwin()
     sys.exit(0)
 
@@ -55,11 +58,13 @@ while True:
         with Controller.from_port(port = 9051) as tor_controller:
             tor_controller.authenticate()  #provide the password here if you set one
             tor_controller.signal(stem.Signal.SHUTDOWN)
+        
+        system("sync")
         curses.endwin()
         sys.exit(0)
     
     except Exception as e:  #change ip when errors occured      
-        print e
+        CUI_update(3, msg="@@Last error@@" + str(e))
         socks.setdefaultproxy() #default proxy to interact with TOR
         with Controller.from_port(port = 9051) as tor_controller:
             tor_controller.authenticate()  #provide the password here if you set one
